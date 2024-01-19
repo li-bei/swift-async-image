@@ -1,12 +1,13 @@
 import UIKit
 
+private let logger = makeLogger()
+
 extension UIImageView {
     private static var tasks: [ObjectIdentifier: Task<Void, Never>] = [:]
     
-    public func setImage(from url: URL?, loader: AsyncImageLoader = .shared, completion: ((Error?) -> Void)? = nil) {
+    public func setAsyncImage(url: URL?, loader: AsyncImageLoader = .shared) {
         let id = ObjectIdentifier(self)
         Self.tasks[id]?.cancel()
-        Self.tasks[id] = nil
         image = nil
         guard let url else {
             return
@@ -18,14 +19,11 @@ extension UIImageView {
             Self.tasks[id] = Task { [weak self] in
                 do {
                     let image = try await loader.image(from: url)
-                    if !Task.isCancelled {
+                    if Task.isCancelled == false {
                         self?.image = image
-                        completion?(nil)
                     }
                 } catch {
-                    if !Task.isCancelled {
-                        completion?(error)
-                    }
+                    logger.error("\(error)")
                 }
             }
         }
