@@ -8,6 +8,7 @@ extension UIImageView {
     public func setAsyncImage(url: URL?, loader: AsyncImageLoader = .shared) {
         let id = ObjectIdentifier(self)
         Self.tasks[id]?.cancel()
+        Self.tasks[id] = nil
         image = nil
         guard let url else {
             return
@@ -24,6 +25,9 @@ extension UIImageView {
                     }
                 } catch {
                     logger.error("\(error)")
+                }
+                if Task.isCancelled == false {
+                    Self.tasks[id] = nil
                 }
             }
         }

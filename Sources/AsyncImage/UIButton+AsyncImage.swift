@@ -8,6 +8,7 @@ extension UIButton {
     public func setAsyncImage(url: URL?, loader: AsyncImageLoader = .shared) {
         let id = ObjectIdentifier(self)
         Self.tasks[id]?.cancel()
+        Self.tasks[id] = nil
         setImage(nil, for: .normal)
         guard let url else {
             return
@@ -24,6 +25,9 @@ extension UIButton {
                     }
                 } catch {
                     logger.error("\(error)")
+                }
+                if Task.isCancelled == false {
+                    Self.tasks[id] = nil
                 }
             }
         }
