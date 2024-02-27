@@ -25,7 +25,7 @@ public final class AsyncImageLoader {
         
         let task = Task.detached(priority: .high) { [imageProcessor] in
             let fileURL = try await FileDownloader.shared.downloadFile(from: url)
-            if var image = UIImage(contentsOfFile: fileURL.path()) {
+            if var image = UIImage(contentsOfFile: fileURL.path) {
                 if let imageProcessor {
                     image = imageProcessor(image)
                 }

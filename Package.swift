@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
     name: "swift-async-image",
     platforms: [
-        .iOS(.v16),
+        .iOS(.v15),
     ],
     products: [
         .library(name: "AsyncImage", targets: ["AsyncImage"]),

@@ -1,24 +1,17 @@
 import Foundation
-import os
 
-public final class FileDownloader: NSObject, Sendable {
+public final class FileDownloader: NSObject, @unchecked Sendable {
     public static let shared = FileDownloader()
     
-    private override init() {}
+    private let fileManager: FileManager
     
-    private let tasks = OSAllocatedUnfairLock<[URL: Task<URL, Error>]>(initialState: [:])
-    
-    public func fileURL(for url: URL) -> URL {
-        return URL.cachesDirectory
-            .appending(path: "\(FileDownloader.self)", directoryHint: .isDirectory)
-            .appending(path: url.host()!, directoryHint: .isDirectory)
-            .appending(path: url.path())
+    private override init() {
+        fileManager = .default
     }
     
-    public func isFileDownloaded(from url: URL) -> Bool {
-        let fileURL = fileURL(for: url)
-        return FileManager.default.fileExists(atPath: fileURL.path())
-    }
+    private let lock = NSLock()
+    
+    private var tasks: [URL: Task<URL, Error>] = [:]
     
     @discardableResult
     public func downloadFile(from url: URL) async throws -> URL {
@@ -27,28 +20,39 @@ public final class FileDownloader: NSObject, Sendable {
             return fileURL
         }
         
-        if let task = tasks.withLock({ $0[url] }) {
+        if let task = lock.withLock({ tasks[url] }) {
             return try await task.value
         }
         
         let task = Task {
             let (tempURL, _) = try await URLSession.shared.download(from: url, delegate: self)
-            let fileManager = FileManager.default
             try fileManager.createDirectory(at: fileURL.deletingLastPathComponent(), withIntermediateDirectories: true)
             try fileManager.moveItem(at: tempURL, to: fileURL)
             return fileURL
         }
         
-        tasks.withLock { $0[url] = task }
+        lock.withLock { tasks[url] = task }
         
         do {
             let fileURL = try await task.value
-            tasks.withLock { $0[url] = nil }
+            lock.withLock { tasks[url] = nil }
             return fileURL
         } catch {
-            tasks.withLock { $0[url] = nil }
+            lock.withLock { tasks[url] = nil }
             throw error
         }
+    }
+    
+    public func isFileDownloaded(from url: URL) -> Bool {
+        let fileURL = fileURL(for: url)
+        return fileManager.fileExists(atPath: fileURL.path)
+    }
+    
+    public func fileURL(for url: URL) -> URL {
+        return fileManager.urls(for: .cachesDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("\(FileDownloader.self)", isDirectory: true)
+            .appendingPathComponent(url.host!, isDirectory: true)
+            .appendingPathComponent(url.path)
     }
 }
 

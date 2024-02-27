@@ -1,1 +1,1 @@
-struct AsyncImageError: Error {}
+public struct AsyncImageError: Error {}
