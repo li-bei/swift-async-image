@@ -20,6 +20,7 @@ public final class FileDownloader: NSObject, Sendable {
         return FileManager.default.fileExists(atPath: fileURL.path())
     }
     
+    @discardableResult
     public func downloadFile(from url: URL) async throws -> URL {
         let fileURL = fileURL(for: url)
         if isFileDownloaded(from: url) {
