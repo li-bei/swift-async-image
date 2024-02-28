@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "swift-file-downloader",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/li-bei/swift-file-downloader",
+      "state" : {
+        "revision" : "1736bfa4bbc6033f31d17f7ddfc3eacd971cfae7",
+        "version" : "0.1.0"
+      }
+    }
+  ],
+  "version" : 2
+}
