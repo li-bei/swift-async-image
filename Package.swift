@@ -1,4 +1,4 @@
-// swift-tools-version: 5.9
+// swift-tools-version: 5.10
 
 import PackageDescription
 
@@ -11,7 +11,7 @@ let package = Package(
         .library(name: "AsyncImage", targets: ["AsyncImage"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/li-bei/swift-file-downloader", from: "0.1.0"),
+        .package(url: "https://github.com/li-bei/swift-file-downloader", from: "0.2.0"),
     ],
     targets: [
         .target(

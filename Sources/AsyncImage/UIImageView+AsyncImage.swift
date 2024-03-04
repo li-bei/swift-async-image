@@ -1,9 +1,9 @@
 import UIKit
 
-private let logger = makeLogger()
-
 extension UIImageView {
     private static var tasks: [ObjectIdentifier: Task<Void, Never>] = [:]
+    
+    private static let logger = makeLogger()
     
     public func setAsyncImage(url: URL?, loader: AsyncImageLoader = .shared) {
         let id = ObjectIdentifier(self)
@@ -24,7 +24,7 @@ extension UIImageView {
                         self?.image = image
                     }
                 } catch {
-                    logger.error("\(error)")
+                    Self.logger.error("\(error)")
                 }
                 if Task.isCancelled == false {
                     Self.tasks[id] = nil
