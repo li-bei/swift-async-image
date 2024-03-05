@@ -11,7 +11,7 @@ let package = Package(
         .library(name: "AsyncImage", targets: ["AsyncImage"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/li-bei/swift-file-downloader", from: "0.2.0"),
+        .package(url: "https://github.com/li-bei/swift-file-downloader", from: "0.3.0"),
     ],
     targets: [
         .target(

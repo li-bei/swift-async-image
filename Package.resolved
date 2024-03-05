@@ -1,13 +1,13 @@
 {
-  "originHash" : "f8b49b8aa34bba2fcbffc9690257f76a2a59d9bdfae4b3c24b6c4b790079fd04",
+  "originHash" : "e632be346d7c771d2ef84ea6055e626af2a26d40cc792fd621ea353ef7183bd6",
   "pins" : [
     {
       "identity" : "swift-file-downloader",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/li-bei/swift-file-downloader",
       "state" : {
-        "revision" : "5844c7aaf75e01ebd024eb683147281d80b71821",
-        "version" : "0.2.0"
+        "revision" : "070b10d761f6aa0c47c829d09c45fa438ade8964",
+        "version" : "0.3.0"
       }
     }
   ],
