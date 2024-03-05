@@ -1,9 +1,9 @@
 import UIKit
 
 extension UIImageView {
-    private static var tasks: [ObjectIdentifier: Task<Void, Never>] = [:]
-    
     private static let logger = makeLogger()
+    
+    private static var tasks: [ObjectIdentifier: Task<Void, Never>] = [:]
     
     public func setAsyncImage(url: URL?, loader: AsyncImageLoader = .shared) {
         let id = ObjectIdentifier(self)
