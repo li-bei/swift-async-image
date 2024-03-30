@@ -1,8 +1,6 @@
 import UIKit
 
 extension UIImageView {
-    private static let logger = makeLogger()
-    
     private static var tasks: [ObjectIdentifier: Task<Void, Never>] = [:]
     
     public func setAsyncImage(url: URL?, loader: AsyncImageLoader = .shared) {
@@ -10,10 +8,7 @@ extension UIImageView {
         Self.tasks[id]?.cancel()
         Self.tasks[id] = nil
         image = nil
-        guard let url else {
-            return
-        }
-        
+        guard let url else { return }
         if let image = loader.cachedImage(from: url) {
             self.image = image
         } else {
@@ -24,7 +19,7 @@ extension UIImageView {
                         self?.image = image
                     }
                 } catch {
-                    Self.logger.error("\(error)")
+                    makeLogger().error("\(error)")
                 }
                 if Task.isCancelled == false {
                     Self.tasks[id] = nil

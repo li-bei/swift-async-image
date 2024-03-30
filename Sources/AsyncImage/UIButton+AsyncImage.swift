@@ -1,8 +1,6 @@
 import UIKit
 
 extension UIButton {
-    private static let logger = makeLogger()
-    
     private static var tasks: [ObjectIdentifier: Task<Void, Never>] = [:]
     
     public func setAsyncImage(url: URL?, loader: AsyncImageLoader = .shared) {
@@ -10,10 +8,7 @@ extension UIButton {
         Self.tasks[id]?.cancel()
         Self.tasks[id] = nil
         setImage(nil, for: .normal)
-        guard let url else {
-            return
-        }
-        
+        guard let url else { return }
         if let image = loader.cachedImage(from: url) {
             setImage(image, for: .normal)
         } else {
@@ -24,7 +19,7 @@ extension UIButton {
                         self?.setImage(image, for: .normal)
                     }
                 } catch {
-                    Self.logger.error("\(error)")
+                    makeLogger().error("\(error)")
                 }
                 if Task.isCancelled == false {
                     Self.tasks[id] = nil
