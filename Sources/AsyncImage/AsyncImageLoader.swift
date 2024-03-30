@@ -32,7 +32,7 @@ public final class AsyncImageLoader {
                 }
                 return image.preparingForDisplay() ?? image
             } else {
-                throw AsyncImageError()
+                throw AsyncImageError(url: url)
             }
         }
         

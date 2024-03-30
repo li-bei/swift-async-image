@@ -1,1 +1,5 @@
-public struct AsyncImageError: Error {}
+import Foundation
+
+public struct AsyncImageError: Error {
+    public let url: URL
+}
